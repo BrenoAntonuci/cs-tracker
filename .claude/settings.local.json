@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install *)",
+      "Bash(pnpm --filter api type-check)",
+      "Bash(pnpm --filter web type-check)"
+    ]
+  }
+}

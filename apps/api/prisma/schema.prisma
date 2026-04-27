@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id         String      @id @default(cuid())
+  steamId    String?     @unique
+  email      String?     @unique
+  username   String
+  avatarUrl  String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  matches    Match[]
+  steamStats SteamStats?
+}
+
+model Match {
+  id        String      @id @default(cuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  map       String
+  mode      GameMode
+  result    MatchResult
+  kills     Int
+  deaths    Int
+  assists   Int
+  headshots Int
+  mvps      Int
+  score     Int
+  duration  Int?
+  playedAt  DateTime
+  createdAt DateTime    @default(now())
+
+  @@index([userId])
+  @@index([userId, playedAt])
+  @@index([userId, map])
+  @@index([userId, mode])
+}
+
+model SteamStats {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalKills   Int
+  totalDeaths  Int
+  totalWins    Int
+  totalMatches Int
+  accuracy     Float
+  hsPercentage Float
+  lastSyncedAt DateTime
+  rawData      Json
+
+  @@index([userId])
+}
+
+enum GameMode {
+  COMPETITIVE
+  PREMIER
+  WINGMAN
+  DEATHMATCH
+  CASUAL
+}
+
+enum MatchResult {
+  WIN
+  LOSS
+  DRAW
+}
