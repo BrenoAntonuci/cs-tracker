@@ -72,49 +72,51 @@ export function MatchesClient({ initialData }: { initialData: PaginatedResponse<
         </div>
       ) : (
         <div className="bg-cs-card border border-cs-border rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-cs-border">
-                {['Resultado', 'Mapa', 'Modo', 'K/D/A', 'HS%', 'MVPs', 'Data', ''].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-cs-muted font-medium text-xs">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.data.map((match) => (
-                <tr key={match.id} className="border-b border-cs-border/50 hover:bg-white/5">
-                  <td className={`px-4 py-3 font-semibold ${resultColors[match.result]}`}>
-                    {resultLabels[match.result]}
-                  </td>
-                  <td className="px-4 py-3 text-white">{match.map}</td>
-                  <td className="px-4 py-3 text-cs-muted">{match.mode}</td>
-                  <td className="px-4 py-3 font-mono text-white">
-                    {match.kills}/{match.deaths}/{match.assists}
-                  </td>
-                  <td className="px-4 py-3 text-white">
-                    {match.kills > 0
-                      ? `${((match.headshots / match.kills) * 100).toFixed(0)}%`
-                      : '—'}
-                  </td>
-                  <td className="px-4 py-3 text-white">{match.mvps}</td>
-                  <td className="px-4 py-3 text-cs-muted">
-                    {new Date(match.playedAt).toLocaleDateString('pt-BR')}
-                  </td>
-                  <td className="px-4 py-3">
-                    <button
-                      onClick={() => setDeleteTarget(match)}
-                      className="text-cs-muted hover:text-red-400 transition-colors"
-                      title="Remover partida"
-                    >
-                      <TrashIcon />
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
+              <thead>
+                <tr className="border-b border-cs-border">
+                  {['Resultado', 'Mapa', 'Modo', 'K/D/A', 'HS%', 'MVPs', 'Data', ''].map((h) => (
+                    <th key={h} className="text-left px-4 py-3 text-cs-muted font-medium text-xs">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.data.map((match) => (
+                  <tr key={match.id} className="border-b border-cs-border/50 hover:bg-white/5">
+                    <td className={`px-4 py-3 font-semibold ${resultColors[match.result]}`}>
+                      {resultLabels[match.result]}
+                    </td>
+                    <td className="px-4 py-3 text-white">{match.map}</td>
+                    <td className="px-4 py-3 text-cs-muted">{match.mode}</td>
+                    <td className="px-4 py-3 font-mono text-white">
+                      {match.kills}/{match.deaths}/{match.assists}
+                    </td>
+                    <td className="px-4 py-3 text-white">
+                      {match.kills > 0
+                        ? `${((match.headshots / match.kills) * 100).toFixed(0)}%`
+                        : '—'}
+                    </td>
+                    <td className="px-4 py-3 text-white">{match.mvps}</td>
+                    <td className="px-4 py-3 text-cs-muted">
+                      {new Date(match.playedAt).toLocaleDateString('pt-BR')}
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => setDeleteTarget(match)}
+                        className="text-cs-muted hover:text-red-400 transition-colors"
+                        title="Remover partida"
+                      >
+                        <TrashIcon />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <div className="px-4 py-3 text-cs-muted text-xs">
             {data.total} partida{data.total !== 1 ? 's' : ''} no total
           </div>

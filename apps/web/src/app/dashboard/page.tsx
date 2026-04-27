@@ -20,8 +20,8 @@ export default async function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="p-4 md:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
           <div>
             <h1 className="text-2xl font-bold text-white">Dashboard</h1>
             <p className="text-cs-muted text-sm mt-1">Sua performance no CS2</p>
@@ -29,7 +29,7 @@ export default async function DashboardPage() {
           <SteamSyncButton lastSynced={steam?.lastSyncedAt ?? null} />
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
           <StatCard
             label="K/D Ratio"
             value={stats?.kdRatio ?? '—'}
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
         </div>
 
         {steam && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
             <div className="col-span-full">
               <p className="text-cs-muted text-xs mb-3 flex items-center gap-1">
                 <span>🎮</span> Steam (dados globais da conta)

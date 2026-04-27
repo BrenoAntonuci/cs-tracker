@@ -1,4 +1,5 @@
 import { prisma } from '../../lib/prisma.js'
+import type { WeaponStat } from '@cs2-tracker/types'
 
 type MatchRow = { result: string; kills: number; deaths: number; headshots: number }
 type MapMatchRow = { map: string; result: string; kills: number; deaths: number }
@@ -123,6 +124,37 @@ export class StatsService {
         kdRatio: totalDeaths > 0 ? Number((totalKills / totalDeaths).toFixed(2)) : totalKills,
       }
     })
+  }
+
+  async getWeaponStats(userId: string): Promise<WeaponStat[]> {
+    const steamStats = await prisma.steamStats.findUnique({ where: { userId } })
+    if (!steamStats) return []
+
+    const rawData = steamStats.rawData as Array<{ name: string; value: number }>
+    const lookup: Record<string, number> = {}
+    for (const { name, value } of rawData) {
+      lookup[name] = value
+    }
+
+    const EXCLUDED = new Set([
+      'enemy_weapon', 'knife_fight', 'against_zoomed_sniper', 'enemy_blinded', 'headshot',
+    ])
+
+    const weapons = Object.keys(lookup)
+      .filter((k) => k.startsWith('total_kills_'))
+      .map((k) => k.replace('total_kills_', ''))
+      .filter((w) => !EXCLUDED.has(w))
+
+    const result: WeaponStat[] = []
+    for (const weapon of weapons) {
+      const kills = lookup[`total_kills_${weapon}`] ?? 0
+      const shots = lookup[`total_shots_${weapon}`] ?? 0
+      const hits = lookup[`total_hits_${weapon}`] ?? 0
+      const accuracy = shots > 0 ? Math.round((hits / shots) * 100) : 0
+      if (kills > 0) result.push({ weapon, kills, shots, hits, accuracy })
+    }
+
+    return result.sort((a, b) => b.kills - a.kills)
   }
 }
 

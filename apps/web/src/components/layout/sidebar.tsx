@@ -4,16 +4,17 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-  { href: '/matches', label: 'Partidas', icon: '🎮' },
-  { href: '/stats', label: 'Estatísticas', icon: '📈' },
+  { href: '/dashboard', label: 'Dashboard',    icon: '📊' },
+  { href: '/matches',   label: 'Partidas',     icon: '🎮' },
+  { href: '/weapons',   label: 'Armas',        icon: '🔫' },
+  { href: '/stats',     label: 'Estatísticas', icon: '📈' },
 ]
 
 export function Sidebar({ user }: { user: { username: string; avatarUrl: string | null } }) {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 min-h-screen bg-cs-card border-r border-cs-border flex flex-col">
+    <aside className="hidden md:flex w-64 min-h-screen bg-cs-card border-r border-cs-border flex-col">
       <div className="p-6 border-b border-cs-border">
         <span className="text-xl font-bold text-white">🎯 CS2 Tracker</span>
       </div>

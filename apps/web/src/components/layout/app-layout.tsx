@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { api } from '@/lib/api'
 import { Sidebar } from './sidebar'
+import { BottomNav } from './bottom-nav'
 
 export async function AppLayout({ children }: { children: React.ReactNode }) {
   let user
@@ -13,7 +14,8 @@ export async function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <Sidebar user={user} />
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-auto pb-16 md:pb-0">{children}</main>
+      <BottomNav />
     </div>
   )
 }

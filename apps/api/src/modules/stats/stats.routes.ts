@@ -25,4 +25,8 @@ export async function statsRoutes(app: FastifyInstance) {
       .parse(request.query)
     return statsService.getTimeline(request.user.userId, query.groupBy)
   })
+
+  app.get('/weapons', async (request) => {
+    return statsService.getWeaponStats(request.user.userId)
+  })
 }

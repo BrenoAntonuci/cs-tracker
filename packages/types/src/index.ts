@@ -73,6 +73,14 @@ export interface TimelineEntry {
   kdRatio: number
 }
 
+export interface WeaponStat {
+  weapon: string
+  kills: number
+  shots: number
+  hits: number
+  accuracy: number
+}
+
 // API request/response shapes
 export interface CreateMatchBody {
   map: string

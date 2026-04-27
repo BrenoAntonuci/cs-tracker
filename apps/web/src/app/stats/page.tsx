@@ -19,9 +19,9 @@ export default async function StatsPage() {
 
   return (
     <AppLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         <h1 className="text-2xl font-bold text-white mb-2">Estatísticas</h1>
-        <p className="text-cs-muted text-sm mb-8">Análise detalhada da sua performance</p>
+        <p className="text-cs-muted text-sm mb-6 md:mb-8">Análise detalhada da sua performance</p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div className="bg-cs-card border border-cs-border rounded-xl p-5">

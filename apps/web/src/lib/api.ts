@@ -6,6 +6,7 @@ import type {
   StatsByMode,
   TimelineEntry,
   SteamStats,
+  WeaponStat,
   PaginatedResponse,
 } from '@cs2-tracker/types'
 
@@ -78,6 +79,7 @@ export const api = {
     byMode: () => request<StatsByMode[]>('/stats/by-mode', { tags: ['stats'] }),
     timeline: (groupBy: 'week' | 'month' = 'week') =>
       request<TimelineEntry[]>(`/stats/timeline?groupBy=${groupBy}`, { tags: ['stats'] }),
+    weapons: () => request<WeaponStat[]>('/stats/weapons', { tags: ['stats'] }),
   },
 
   steam: {

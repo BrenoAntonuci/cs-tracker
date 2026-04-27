@@ -20,9 +20,9 @@ export default async function MatchesPage({
 
   return (
     <AppLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         <h1 className="text-2xl font-bold text-white mb-2">Partidas</h1>
-        <p className="text-cs-muted text-sm mb-8">Histórico e cadastro de partidas</p>
+        <p className="text-cs-muted text-sm mb-6 md:mb-8">Histórico e cadastro de partidas</p>
         <MatchesClient initialData={data} />
       </div>
     </AppLayout>
