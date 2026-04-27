@@ -1,6 +1,6 @@
 import { AppLayout } from '@/components/layout/app-layout'
-import { WeaponCard } from '@/components/weapons/weapon-card'
 import { WeaponKillsChart } from '@/components/charts/weapon-kills-chart'
+import { WeaponsClient } from '@/components/weapons/weapons-client'
 import { api } from '@/lib/api'
 import { getWeaponLabel } from '@/lib/weapons'
 import type { WeaponStat } from '@cs2-tracker/types'
@@ -8,7 +8,7 @@ import type { WeaponStat } from '@cs2-tracker/types'
 export default async function WeaponsPage() {
   const weapons = await api.stats.weapons().catch((): WeaponStat[] => [])
 
-  const totalKillsWithWeapons = weapons.reduce((sum, w) => sum + w.kills, 0)
+  const totalKills = weapons.reduce((sum, w) => sum + w.kills, 0)
   const topWeapon = weapons[0] ?? null
   const bestAccuracy = weapons
     .filter((w) => w.shots >= 100)
@@ -35,7 +35,7 @@ export default async function WeaponsPage() {
               <div className="bg-cs-card border border-cs-border rounded-xl p-4">
                 <p className="text-cs-muted text-xs mb-1">Total de kills</p>
                 <p className="text-white text-2xl font-bold">
-                  {totalKillsWithWeapons.toLocaleString('pt-BR')}
+                  {totalKills.toLocaleString('pt-BR')}
                 </p>
                 <p className="text-cs-muted text-xs mt-1">{weapons.length} armas usadas</p>
               </div>
@@ -64,18 +64,13 @@ export default async function WeaponsPage() {
             </div>
 
             {/* Kills chart */}
-            <div className="bg-cs-card border border-cs-border rounded-xl p-5 mb-6 md:mb-8">
+            <div className="bg-cs-card border border-cs-border rounded-xl p-5 mb-8 md:mb-10">
               <h2 className="text-white font-semibold mb-4">Top 10 — Kills por Arma</h2>
               <WeaponKillsChart data={weapons} />
             </div>
 
-            {/* All weapon cards */}
-            <h2 className="text-white font-semibold mb-4">Todas as Armas</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-              {weapons.map((stat) => (
-                <WeaponCard key={stat.weapon} stat={stat} />
-              ))}
-            </div>
+            {/* Filterable weapon grid */}
+            <WeaponsClient weapons={weapons} />
           </>
         )}
       </div>
