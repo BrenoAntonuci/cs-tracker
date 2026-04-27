@@ -3,15 +3,19 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import { AddMatchModal } from './add-match-modal'
+import { MatchCard } from './match-card'
 import { ConfirmModal } from '@/components/ui/confirm-modal'
-import { TrashIcon } from '@/components/ui/icons'
+import { TrashIcon, ListIcon, GridIcon } from '@/components/ui/icons'
 import type { Match, PaginatedResponse } from '@cs2-tracker/types'
+
+type ViewMode = 'cards' | 'list'
 
 const resultColors = { WIN: 'text-green-400', LOSS: 'text-red-400', DRAW: 'text-yellow-400' }
 const resultLabels = { WIN: 'Vitória', LOSS: 'Derrota', DRAW: 'Empate' }
 
 export function MatchesClient({ initialData }: { initialData: PaginatedResponse<Match> }) {
   const [data, setData] = useState(initialData)
+  const [viewMode, setViewMode] = useState<ViewMode>('cards')
   const [showAddModal, setShowAddModal] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<Match | null>(null)
   const [deleting, setDeleting] = useState(false)
@@ -39,7 +43,8 @@ export function MatchesClient({ initialData }: { initialData: PaginatedResponse<
 
   return (
     <div>
-      <div className="flex justify-end mb-4">
+      <div className="flex items-center justify-between mb-4">
+        <ViewToggle value={viewMode} onChange={setViewMode} />
         <button
           onClick={() => setShowAddModal(true)}
           className="px-4 py-2 bg-cs-orange text-cs-dark text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity"
@@ -58,6 +63,12 @@ export function MatchesClient({ initialData }: { initialData: PaginatedResponse<
           >
             Cadastre sua primeira partida
           </button>
+        </div>
+      ) : viewMode === 'cards' ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {data.data.map((match) => (
+            <MatchCard key={match.id} match={match} onDelete={setDeleteTarget} />
+          ))}
         </div>
       ) : (
         <div className="bg-cs-card border border-cs-border rounded-xl overflow-hidden">
@@ -117,13 +128,38 @@ export function MatchesClient({ initialData }: { initialData: PaginatedResponse<
       {deleteTarget && (
         <ConfirmModal
           title="Remover partida"
-          description={`Tem certeza que deseja remover a partida em ${deleteTarget.map} (${new Date(deleteTarget.playedAt).toLocaleDateString('pt-BR')})?`}
+          description={`Tem certeza que deseja remover a partida em ${deleteTarget.map.replace('de_', '')} (${new Date(deleteTarget.playedAt).toLocaleDateString('pt-BR')})?`}
           confirmLabel="Remover"
           loading={deleting}
           onConfirm={handleConfirmDelete}
           onCancel={() => setDeleteTarget(null)}
         />
       )}
+    </div>
+  )
+}
+
+function ViewToggle({ value, onChange }: { value: ViewMode; onChange: (v: ViewMode) => void }) {
+  return (
+    <div className="flex items-center gap-1 bg-cs-card border border-cs-border rounded-lg p-1">
+      {([
+        { mode: 'cards' as ViewMode, icon: <GridIcon />, label: 'Cards' },
+        { mode: 'list'  as ViewMode, icon: <ListIcon />, label: 'Lista' },
+      ]).map(({ mode, icon, label }) => (
+        <button
+          key={mode}
+          onClick={() => onChange(mode)}
+          title={label}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+            value === mode
+              ? 'bg-cs-orange text-cs-dark'
+              : 'text-cs-muted hover:text-white'
+          }`}
+        >
+          {icon}
+          {label}
+        </button>
+      ))}
     </div>
   )
 }
