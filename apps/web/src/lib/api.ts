@@ -21,7 +21,8 @@ type RequestOptions = {
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, cache, tags } = options
 
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  const headers: Record<string, string> = {}
+  if (body !== undefined) headers['Content-Type'] = 'application/json'
 
   // In server components, forward cookies from the request
   if (typeof window === 'undefined') {

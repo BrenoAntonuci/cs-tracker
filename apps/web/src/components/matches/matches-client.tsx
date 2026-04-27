@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import { AddMatchModal } from './add-match-modal'
+import { ConfirmModal } from '@/components/ui/confirm-modal'
+import { TrashIcon } from '@/components/ui/icons'
 import type { Match, PaginatedResponse } from '@cs2-tracker/types'
 
 const resultColors = { WIN: 'text-green-400', LOSS: 'text-red-400', DRAW: 'text-yellow-400' }
@@ -10,34 +12,36 @@ const resultLabels = { WIN: 'Vitória', LOSS: 'Derrota', DRAW: 'Empate' }
 
 export function MatchesClient({ initialData }: { initialData: PaginatedResponse<Match> }) {
   const [data, setData] = useState(initialData)
-  const [showModal, setShowModal] = useState(false)
-  const [deleting, setDeleting] = useState<string | null>(null)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<Match | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
-  async function handleDelete(id: string) {
-    if (!confirm('Remover esta partida?')) return
-    setDeleting(id)
+  async function handleConfirmDelete() {
+    if (!deleteTarget) return
+    setDeleting(true)
     try {
-      await api.matches.delete(id)
+      await api.matches.delete(deleteTarget.id)
       setData((prev) => ({
         ...prev,
-        data: prev.data.filter((m) => m.id !== id),
+        data: prev.data.filter((m) => m.id !== deleteTarget.id),
         total: prev.total - 1,
       }))
+      setDeleteTarget(null)
     } finally {
-      setDeleting(null)
+      setDeleting(false)
     }
   }
 
   function handleAdded(match: Match) {
     setData((prev) => ({ ...prev, data: [match, ...prev.data], total: prev.total + 1 }))
-    setShowModal(false)
+    setShowAddModal(false)
   }
 
   return (
     <div>
       <div className="flex justify-end mb-4">
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowAddModal(true)}
           className="px-4 py-2 bg-cs-orange text-cs-dark text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity"
         >
           + Nova Partida
@@ -49,7 +53,7 @@ export function MatchesClient({ initialData }: { initialData: PaginatedResponse<
           <p className="text-4xl mb-4">🎮</p>
           <p>Nenhuma partida registrada.</p>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowAddModal(true)}
             className="mt-4 text-cs-orange hover:underline text-sm"
           >
             Cadastre sua primeira partida
@@ -89,11 +93,11 @@ export function MatchesClient({ initialData }: { initialData: PaginatedResponse<
                   </td>
                   <td className="px-4 py-3">
                     <button
-                      onClick={() => handleDelete(match.id)}
-                      disabled={deleting === match.id}
-                      className="text-red-400 hover:text-red-300 text-xs disabled:opacity-50"
+                      onClick={() => setDeleteTarget(match)}
+                      className="text-cs-muted hover:text-red-400 transition-colors"
+                      title="Remover partida"
                     >
-                      ×
+                      <TrashIcon />
                     </button>
                   </td>
                 </tr>
@@ -106,8 +110,19 @@ export function MatchesClient({ initialData }: { initialData: PaginatedResponse<
         </div>
       )}
 
-      {showModal && (
-        <AddMatchModal onClose={() => setShowModal(false)} onAdded={handleAdded} />
+      {showAddModal && (
+        <AddMatchModal onClose={() => setShowAddModal(false)} onAdded={handleAdded} />
+      )}
+
+      {deleteTarget && (
+        <ConfirmModal
+          title="Remover partida"
+          description={`Tem certeza que deseja remover a partida em ${deleteTarget.map} (${new Date(deleteTarget.playedAt).toLocaleDateString('pt-BR')})?`}
+          confirmLabel="Remover"
+          loading={deleting}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
       )}
     </div>
   )
