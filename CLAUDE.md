@@ -10,6 +10,43 @@ Sistema híbrido para rastrear estatísticas de CS2 com amigos:
 
 ---
 
+## Princípios de Desenvolvimento
+
+Estas diretrizes se aplicam a **toda** implementação neste projeto, sem exceção.
+
+### Qualidade de Código
+- TypeScript estrito — sem `any`, sem `as unknown`, tipar tudo explicitamente
+- Funções pequenas e com responsabilidade única
+- Nomes descritivos — código que se explica sem comentários
+- Sem lógica duplicada — abstrair antes de repetir pela segunda vez
+
+### Componentização (Frontend)
+- Todo elemento de UI reutilizável vira um componente em `components/ui/`
+- Ícones SVG centralizados em `components/ui/icons.tsx`
+- Modais genéricos (ex: `ConfirmModal`) em `components/ui/` com props configuráveis
+- Componentes de feature (ex: `MatchCard`, `StatCard`) em suas subpastas de domínio
+- Props explícitas e tipadas — nunca passar objetos genéricos sem tipo
+
+### Segurança
+- `STEAM_API_KEY` e `JWT_SECRET` **nunca** no frontend — apenas em variáveis de servidor
+- JWT armazenado em cookie `httpOnly` — nunca em `localStorage`
+- Todo input validado com Zod antes de tocar no banco
+- CORS restrito ao `FRONTEND_URL` definido no env
+
+### Estrutura Moderna
+- Server Components por padrão no Next.js — `'use client'` só quando necessário (interatividade, hooks)
+- Lógica de negócio no backend (Fastify) — frontend apenas consome e exibe
+- Módulos do backend com separação clara: `routes` (HTTP) → `service` (lógica) → `prisma` (dados)
+- Imagens de mapas em `public/maps/{de_nome}.png` — registrar em `src/lib/maps.ts`
+
+### Boas Práticas Gerais
+- Erros tratados com mensagens claras ao usuário — nunca expor stack trace
+- Operações independentes executadas em paralelo (`Promise.allSettled`)
+- Sem `console.log` em produção — usar o logger do Fastify no backend
+- Commits pequenos e descritivos
+
+---
+
 ## Stack Técnica
 
 | Camada | Tecnologia | Justificativa |
