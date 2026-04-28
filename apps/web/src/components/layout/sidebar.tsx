@@ -14,7 +14,7 @@ export function Sidebar({ user }: { user: { username: string; avatarUrl: string 
   const pathname = usePathname()
 
   return (
-    <aside className="hidden md:flex w-64 min-h-screen bg-cs-card border-r border-cs-border flex-col">
+    <aside className="hidden md:flex w-64 h-full bg-cs-card border-r border-cs-border flex-col">
       <div className="p-6 border-b border-cs-border">
         <span className="text-xl font-bold text-white">🎯 CS2 Tracker</span>
       </div>
