@@ -7,6 +7,7 @@ import { authRoutes } from './modules/auth/auth.routes.js'
 import { matchRoutes } from './modules/matches/match.routes.js'
 import { statsRoutes } from './modules/stats/stats.routes.js'
 import { steamRoutes } from './modules/steam/steam.routes.js'
+import { usersRoutes } from './modules/users/users.routes.js'
 
 export async function buildApp() {
   const app = Fastify({
@@ -22,6 +23,7 @@ export async function buildApp() {
   await app.register(matchRoutes, { prefix: '/matches' })
   await app.register(statsRoutes, { prefix: '/stats' })
   await app.register(steamRoutes, { prefix: '/steam' })
+  await app.register(usersRoutes, { prefix: '/users' })
 
   app.get('/health', async () => ({ status: 'ok' }))
 

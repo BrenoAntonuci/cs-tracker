@@ -8,6 +8,8 @@ import type {
   SteamStats,
   WeaponStat,
   PaginatedResponse,
+  UserListItem,
+  UserProfile,
 } from '@cs2-tracker/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
@@ -85,5 +87,10 @@ export const api = {
   steam: {
     sync: () => request('/steam/sync', { method: 'POST' }),
     stats: () => request<SteamStats | null>('/steam/stats'),
+  },
+
+  users: {
+    list: () => request<UserListItem[]>('/users'),
+    profile: (userId: string) => request<UserProfile>(`/users/${userId}/profile`),
   },
 }

@@ -8,6 +8,7 @@ const navItems = [
   { href: '/matches',   label: 'Partidas',     icon: '🎮' },
   { href: '/weapons',   label: 'Armas',        icon: '🔫' },
   { href: '/stats',     label: 'Estatísticas', icon: '📈' },
+  { href: '/profile',   label: 'Perfis',       icon: '👤' },
 ]
 
 export function Sidebar({ user }: { user: { username: string; avatarUrl: string | null } }) {

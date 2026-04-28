@@ -8,6 +8,7 @@ const navItems = [
   { href: '/matches',   label: 'Partidas',  icon: '🎮' },
   { href: '/weapons',   label: 'Armas',     icon: '🔫' },
   { href: '/stats',     label: 'Stats',     icon: '📈' },
+  { href: '/profile',   label: 'Perfis',    icon: '👤' },
 ]
 
 export function BottomNav() {

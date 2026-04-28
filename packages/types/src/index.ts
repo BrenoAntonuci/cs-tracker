@@ -107,3 +107,17 @@ export interface ApiError {
   message: string
   code?: string
 }
+
+export interface UserListItem {
+  id: string
+  username: string
+  avatarUrl: string | null
+}
+
+export interface UserProfile {
+  user: UserListItem
+  overview: StatsOverview
+  recentMatches: Match[]
+  statsByMap: StatsByMap[]
+  weapons: WeaponStat[]
+}
