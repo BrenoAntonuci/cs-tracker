@@ -22,6 +22,8 @@ export interface Match {
   headshots: number
   mvps: number
   score: number
+  teamScore: number | null
+  enemyScore: number | null
   duration: number | null
   playedAt: string
   createdAt: string
@@ -92,6 +94,8 @@ export interface CreateMatchBody {
   headshots: number
   mvps: number
   score: number
+  teamScore?: number
+  enemyScore?: number
   duration?: number
   playedAt: string
 }

@@ -31,6 +31,8 @@ export function AddMatchModal({
     headshots: 0,
     mvps: 0,
     score: 0,
+    teamScore: '',
+    enemyScore: '',
     duration: '',
     playedAt: new Date().toISOString().slice(0, 16),
   })
@@ -47,6 +49,8 @@ export function AddMatchModal({
       const match = await api.matches.create({
         ...form,
         playedAt: new Date(form.playedAt).toISOString(),
+        teamScore: form.teamScore ? Number(form.teamScore) : undefined,
+        enemyScore: form.enemyScore ? Number(form.enemyScore) : undefined,
         duration: form.duration ? Number(form.duration) : undefined,
       })
       onAdded(match)
@@ -141,7 +145,31 @@ export function AddMatchModal({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block text-xs text-cs-muted mb-1">Placar (nós)</label>
+              <input
+                type="number"
+                min="0"
+                max="30"
+                value={form.teamScore}
+                onChange={(e) => set('teamScore', e.target.value)}
+                placeholder="Ex: 13"
+                className="w-full bg-cs-dark border border-cs-border rounded-lg px-3 py-2 text-white text-sm placeholder:text-cs-muted"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-cs-muted mb-1">Placar (eles)</label>
+              <input
+                type="number"
+                min="0"
+                max="30"
+                value={form.enemyScore}
+                onChange={(e) => set('enemyScore', e.target.value)}
+                placeholder="Ex: 7"
+                className="w-full bg-cs-dark border border-cs-border rounded-lg px-3 py-2 text-white text-sm placeholder:text-cs-muted"
+              />
+            </div>
             <div>
               <label className="block text-xs text-cs-muted mb-1">Duração (min)</label>
               <input
@@ -153,15 +181,16 @@ export function AddMatchModal({
                 className="w-full bg-cs-dark border border-cs-border rounded-lg px-3 py-2 text-white text-sm placeholder:text-cs-muted"
               />
             </div>
-            <div>
-              <label className="block text-xs text-cs-muted mb-1">Data/Hora</label>
-              <input
-                type="datetime-local"
-                value={form.playedAt}
-                onChange={(e) => set('playedAt', e.target.value)}
-                className="w-full bg-cs-dark border border-cs-border rounded-lg px-3 py-2 text-white text-sm"
-              />
-            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs text-cs-muted mb-1">Data/Hora</label>
+            <input
+              type="datetime-local"
+              value={form.playedAt}
+              onChange={(e) => set('playedAt', e.target.value)}
+              className="w-full bg-cs-dark border border-cs-border rounded-lg px-3 py-2 text-white text-sm"
+            />
           </div>
 
           {error && <p className="text-red-400 text-xs">{error}</p>}

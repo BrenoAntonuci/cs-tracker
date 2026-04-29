@@ -10,7 +10,7 @@ const MAP_IMAGES: Record<string, string> = {
   de_ancient:  '/maps/de_ancient.png',
   de_anubis:   '/maps/de_anubis.png',
   de_train:    '/maps/de_train.png',
-  de_cache:    '/maps/de_cache.png',
+  de_cache:    '/maps/de_cache.jpg',
 }
 
 export function getMapImage(mapName: string): string | null {

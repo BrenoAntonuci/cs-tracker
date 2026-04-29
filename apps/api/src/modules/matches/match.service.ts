@@ -15,6 +15,8 @@ export class MatchService {
         headshots: data.headshots,
         mvps: data.mvps,
         score: data.score,
+        teamScore: data.teamScore,
+        enemyScore: data.enemyScore,
         duration: data.duration,
         playedAt: new Date(data.playedAt),
       },

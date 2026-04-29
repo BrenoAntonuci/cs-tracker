@@ -10,6 +10,8 @@ export const createMatchSchema = z.object({
   headshots: z.number().int().min(0).max(500),
   mvps: z.number().int().min(0).max(50),
   score: z.number().int().min(0),
+  teamScore: z.number().int().min(0).max(30).optional(),
+  enemyScore: z.number().int().min(0).max(30).optional(),
   duration: z.number().int().min(1).max(300).optional(),
   playedAt: z.string().datetime(),
 })

@@ -32,8 +32,10 @@ model Match {
   assists   Int
   headshots Int
   mvps      Int
-  score     Int
-  duration  Int?
+  score      Int
+  teamScore  Int?
+  enemyScore Int?
+  duration   Int?
   playedAt  DateTime
   createdAt DateTime    @default(now())
 

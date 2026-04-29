@@ -70,11 +70,23 @@ export function MatchCard({ match, onDelete }: MatchCardProps) {
         <Stat label="MVPs" value={String(match.mvps)} />
       </div>
 
-      <p className="px-3 pb-3 text-cs-muted text-xs">
-        {new Date(match.playedAt).toLocaleDateString('pt-BR', {
-          day: '2-digit', month: 'short', year: 'numeric',
-        })}
-      </p>
+      <div className="px-3 pb-3 flex items-center justify-between">
+        <p className="text-cs-muted text-xs">
+          {new Date(match.playedAt).toLocaleDateString('pt-BR', {
+            day: '2-digit', month: 'short', year: 'numeric',
+          })}
+        </p>
+        <div className="flex items-center gap-2">
+          {match.teamScore != null && match.enemyScore != null && (
+            <span className={`text-xs font-mono font-bold ${result.text}`}>
+              {match.teamScore} – {match.enemyScore}
+            </span>
+          )}
+          {match.duration != null && (
+            <span className="text-cs-muted text-xs">{match.duration} min</span>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
